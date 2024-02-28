@@ -1,11 +1,17 @@
 # kafka tcp api 实现
 
-协议参考：
+## 测试运行
+
+    $ node test.js [host] [port] [clientId] [groupId] [topic1] [topic2]...
+
+## 协议实现
+
+参考：
 
 - https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol
 - https://kafka.apache.org/protocol.html
 
-## 基础类型
+### 基础类型
 
 定长基本类型
 
@@ -29,7 +35,7 @@ Byte 序列：
       Length => int32
       Content => [ String | Bytes | int8 | int16 | int32 | int64 ]
 
-## 请求/响应格式
+### 请求/响应格式
 
     RequestOrResponse => Size (RequestMessage | ResponseMessage)
       Size => int32
@@ -45,7 +51,7 @@ Byte 序列：
       CorrelationId => int32
       Response => MetadataResponse | ProduceResponse | FetchResponse | OffsetResponse | OffsetCommitResponse | OffsetFetchResponse
 
-### 元数据请求/响应
+#### 元数据请求/响应
 
     MetadataRequest => [TopicName]
       TopicName => string
@@ -64,7 +70,7 @@ Byte 序列：
         Replicas => [int32]
         Isr => [int32]
 
-### 消费组协调者请求/响应
+#### 消费组协调者请求/响应
 
     GroupCoordinatorRequest => GroupId
       GroupId => string
@@ -75,7 +81,7 @@ Byte 序列：
       CoordinatorHost => string
       CoordinatorPort => int32
 
-### ApiVersion
+#### ApiVersion
 
     ApiVersions Request =>
 

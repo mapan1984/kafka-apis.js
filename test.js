@@ -1,33 +1,34 @@
-const protocol = require('../protocol')
-const Client = require('../utils/client')
+const protocol = require('./protocol')
+const Client = require('./client')
 
 
 const host = process.argv[2] || '127.0.0.1'
 const port = process.argv[3] || 9092
-const topics = process.argv.slice(4)
+const clientId = process.argv[4] || 'test'
+const groupId = process.argv[5] || 'test'
+const topics = process.argv.slice(6)
 
 
 const request0 = new protocol.MetadataRequestEncoder()
     .correlationId(0)
-    .clientId('test')
+    .clientId(clientId)
     .encode()
 console.log('request buffer: ', request0)
 
 const request1 = new protocol.MetadataRequestEncoder()
     .correlationId(1)
-    .clientId('test')
+    .clientId(clientId)
     .topics(...topics)
     .encode()
 
 const request2 = new protocol.FindCoordinatorRequestEncoder()
     .correlationId(2)
-    .groupId('test')
+    .groupId(groupId)
     .encode()
 
 const request3 = new protocol.ApiVersionsRequestEncoder()
     .correlationId(3)
     .encode()
-
 
 
 const client = new Client(host, port)

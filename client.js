@@ -1,6 +1,6 @@
 const net = require('net')
 
-const DataBuffer = require('./data-buffer')
+const DataBuffer = require('./utils/data-buffer')
 
 class Client {
     constructor(host, port) {
