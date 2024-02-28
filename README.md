@@ -34,12 +34,12 @@ Byte 序列：
     RequestOrResponse => Size (RequestMessage | ResponseMessage)
       Size => int32
 
-    RequestMessage => ApiKey ApiVersion CorrelationId ClientId RequestMessage
+    RequestMessage => ApiKey ApiVersion CorrelationId ClientId Request
       ApiKey => int16
       ApiVersion => int16
       CorrelationId => int32
       ClientId => string
-      RequestMessage => MetadataRequest | ProduceRequest | FetchRequest | OffsetRequest | OffsetCommitRequest | OffsetFetchRequest
+      Request => MetadataRequest | ProduceRequest | FetchRequest | OffsetRequest | OffsetCommitRequest | OffsetFetchRequest
 
     ResponseMessage => CorrelationId Response
       CorrelationId => int32
@@ -74,4 +74,15 @@ Byte 序列：
       CoordinatorId => int32
       CoordinatorHost => string
       CoordinatorPort => int32
+
+### ApiVersion
+
+    ApiVersions Request =>
+
+    ApiVersions Response => error_code [api_keys]
+      error_code => int16
+      api_keys => api_key min_version max_version
+        api_key => int16
+        min_version => int16
+        max_version => int16
 

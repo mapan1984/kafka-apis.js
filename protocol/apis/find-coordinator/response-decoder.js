@@ -1,4 +1,4 @@
-const ResponseDecoder = require('../base/response')
+const ResponseDecoder = require('../../base/response')
 
 class GroupCoordinatorResponseDecoder extends ResponseDecoder {
     constructor() {
@@ -11,9 +11,8 @@ class GroupCoordinatorResponseDecoder extends ResponseDecoder {
         }
     }
 
-    decode() {
-        let _response = super.decode()
-
+    decode(data) {
+        let _response = super.decode(data)
         this.response = {..._response, ...this.response}
 
         let errorCode = this.readIntBE(2)  // int16

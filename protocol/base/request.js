@@ -24,12 +24,12 @@ class RequestEncoder {
             0, 0,  // ApiVersion 0
         ]
 
-        this.correlationId = [
+        this._correlationId = 0
+        this.correlationIdBytes = [
             0, 0, 0, 0,  // CorrelationId 0
         ]
 
-        this.clientIdBytes = null
-        this.defaultClientId = [
+        this.clientIdBytes = [
             // clientId
             0, 18,  // string len 18 bytes
             107, 97, 102, 107, 97, 45, 97, 103, 101, 110, 116, 45, 99, 108, 105, 101, 110, 116, // string content `kafka-agent-client`
@@ -69,25 +69,43 @@ class RequestEncoder {
         return content
     }
 
+    correlationId(correlationId) {
+        this._correlationId = correlationId
+        this.correlationIdBytes = [
+            0xFF000000 & correlationId,
+            0x00FF0000 & correlationId,
+            0x0000FF00 & correlationId,
+            0x000000FF & correlationId,
+        ]
+        console.log('correlationId: ', this.correlationIdBytes)
+        return this
+    }
+
     clientId(clientId) {
         this.clientIdBytes = this.string(clientId)
+        console.log('clientId: ', this.clientIdBytes)
         return this
     }
 
     _encode(requestMessage) {
-        if (this.clientIdBytes === null) {
-            this.clientIdBytes = this.defaultClientId
-        }
-
         let content = [].concat(
             this.apiKey,
             this.apiVersion,
-            this.correlationId,
+            this.correlationIdBytes,
             this.clientIdBytes,
-            requestMessage,
         )
 
+        // if (this.clientIdBytes != null) {
+        //     content.concat(this.clientIdBytes)
+        // }
+
+        if (requestMessage != null) {
+            console.log('requestMessage: ', requestMessage)
+            content = content.concat(requestMessage)
+        }
+
         this.size = content.length
+        console.log('size: ', this.size);
 
         this.sizeBytes = [
             0xFF000000 & this.size,
@@ -95,10 +113,14 @@ class RequestEncoder {
             0x0000FF00 & this.size,
             0x000000FF & this.size,
         ]
+        console.log('size: ', this.sizeBytes);
 
         this.data = this.sizeBytes.concat(content)
 
-        return Buffer.from(this.data)
+        return {
+            correlationId: this._correlationId,
+            data: Buffer.from(this.data),
+        }
     }
 }
 

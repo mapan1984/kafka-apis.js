@@ -1,6 +1,6 @@
-const RequestEncoder = require('../base/request')
+const RequestEncoder = require('../../base/request')
 
-class GroupCoordinatorRequestEncoder extends RequestEncoder {
+class FindCoordinatorRequestEncoder extends RequestEncoder {
     constructor() {
         super()
 
@@ -30,4 +30,4 @@ class GroupCoordinatorRequestEncoder extends RequestEncoder {
     }
 }
 
-module.exports = GroupCoordinatorRequestEncoder
+module.exports = FindCoordinatorRequestEncoder

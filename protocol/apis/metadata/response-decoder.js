@@ -1,4 +1,4 @@
-const ResponseDecoder = require('../base/response')
+const ResponseDecoder = require('../../base/response')
 
 class MetadataResponseDecoder extends ResponseDecoder {
     constructor() {
@@ -10,9 +10,8 @@ class MetadataResponseDecoder extends ResponseDecoder {
         }
     }
 
-    decode() {
-        let _response = super.decode()
-
+    decode(data) {
+        let _response = super.decode(data)
         this.response = {..._response, ...this.response}
 
         // 获取全部 broker 信息
